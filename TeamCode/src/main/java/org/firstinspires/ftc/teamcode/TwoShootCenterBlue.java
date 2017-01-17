@@ -28,6 +28,7 @@ public class TwoShootCenterBlue extends LinearOpMode {
     Boolean turnTwoDone = false;
     Boolean longDriveDone = false;
     Boolean followOneDone = false;
+    Boolean followTwoDone = false;
 
 
 
