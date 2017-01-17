@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
-//jus
+//Justin > Mitch
 /**
 
   This works
@@ -28,7 +28,7 @@ public class TwoShootCenterBlue extends LinearOpMode {
     Boolean turnTwoDone = false;
     Boolean longDriveDone = false;
     Boolean followOneDone = false;
-    Boolean test = false;
+
 
 
     double vr = 1;//change for direction and battery
