@@ -35,6 +35,10 @@ public class TwoShootCenterRed extends LinearOpMode {
     Boolean turnTwoDone = false;
     Boolean longDriveDone = false;
     Boolean followOneDone = false;
+    Boolean beaconOneWrong = false;
+    Boolean beaconTwoWrong = false;
+
+    Boolean shoot = false;
 
 
     double vr = 1;//change for direction and battery
@@ -97,22 +101,23 @@ public class TwoShootCenterRed extends LinearOpMode {
             }
             robot.MotorL.setPower(-.85 * vl);
             robot.MotorR.setPower(-.85 * vr);
-            robot.TouchServo.setPosition(.55);
+            robot.TouchServo.setPosition(1);//out
             robot.PressServoL.setPosition(0);//in
             telemetry.addData("Status:", status);
             telemetry.addData("MotorL current", robot.MotorL.getCurrentPosition() - startPosL);
             telemetry.addData("sensorColor:", robot.ColSensor.blue());
             telemetry.update();
 
-            //turn on shooter
-            if(shot < shotSpeed){
-                shot += 0.02;
-                robot.ShooterDown.setPower(shot);
-                robot.ShooterUp.setPower(-shot);
-            }
-            else{
-                robot.ShooterDown.setPower(shotSpeed);
-                robot.ShooterUp.setPower(-shotSpeed);
+            if(shoot) {
+                //turn on shooter
+                if (shot < shotSpeed) {
+                    shot += 0.02;
+                    robot.ShooterDown.setPower(shot);
+                    robot.ShooterUp.setPower(-shot);
+                } else {
+                    robot.ShooterDown.setPower(shotSpeed);
+                    robot.ShooterUp.setPower(-shotSpeed);
+                }
             }
         }
         robot.MotorR.setPower(0);
@@ -129,8 +134,10 @@ public class TwoShootCenterRed extends LinearOpMode {
             telemetry.update();
             idle();
 
-            robot.ShooterDown.setPower(shotSpeed);
-            robot.ShooterUp.setPower(-shotSpeed);
+            if(shoot) {
+                robot.ShooterDown.setPower(shotSpeed);
+                robot.ShooterUp.setPower(-shotSpeed);
+            }
         }
 
         status = "turn until white line";
@@ -163,10 +170,48 @@ public class TwoShootCenterRed extends LinearOpMode {
             telemetry.addData("current", robot.MotorL.getCurrentPosition());
             telemetry.addData("turnOneCount", turnOneCount);
 
-            robot.ShooterDown.setPower(shotSpeed);
-            robot.ShooterUp.setPower(-shotSpeed);
+            if(shoot) {
+                robot.ShooterDown.setPower(shotSpeed);
+                robot.ShooterUp.setPower(-shotSpeed);
+            }
         }
 
+        status = "wait";
+        telemetry.update();
+        startPosL = robot.MotorL.getCurrentPosition();
+        runtime.reset();
+        while (opModeIsActive() && runtime.seconds() < 0.2) {
+            robot.MotorL.setPower(0);
+            robot.MotorR.setPower(0);
+            telemetry.addData("Status:", status);
+            telemetry.addData("MotorL to go", robot.MotorL.getCurrentPosition() - startPosL + 1250);
+            telemetry.update();
+
+            if(shoot) {
+                robot.ShooterDown.setPower(shotSpeed);
+                robot.ShooterUp.setPower(-shotSpeed);
+            }
+        }
+        robot.MotorL.setPower(0);
+        robot.MotorR.setPower(0);
+
+        status = "turn a bit";
+        telemetry.update();
+        startPosL = robot.MotorL.getCurrentPosition();
+        while (opModeIsActive() && robot.MotorL.getCurrentPosition() < startPosL + 110) {
+            robot.MotorL.setPower(.3 * vl);
+            robot.MotorR.setPower(-.3 * vr);
+            telemetry.addData("Status:", status);
+            telemetry.addData("MotorL to go", robot.MotorL.getCurrentPosition() - startPosL + 1250);
+            telemetry.update();
+
+            if(shoot) {
+                robot.ShooterDown.setPower(shotSpeed);
+                robot.ShooterUp.setPower(-shotSpeed);
+            }
+        }
+        robot.MotorL.setPower(0);
+        robot.MotorR.setPower(0);
 
         status = "line follow";
         startPosL = robot.MotorL.getCurrentPosition();
@@ -204,8 +249,10 @@ public class TwoShootCenterRed extends LinearOpMode {
             telemetry.addData(" Change in last and current", Math.abs(lastPosL - robot.MotorL.getCurrentPosition()));
             telemetry.addData("followOneCount", followOneCount);
 
-            robot.ShooterDown.setPower(shotSpeed);
-            robot.ShooterUp.setPower(-shotSpeed);
+            if(shoot) {
+                robot.ShooterDown.setPower(shotSpeed);
+                robot.ShooterUp.setPower(-shotSpeed);
+            }
         }
 
         status = "sense color";
@@ -223,16 +270,37 @@ public class TwoShootCenterRed extends LinearOpMode {
             } else {
                 beaconOneRed = true;
             }
-            robot.ShooterDown.setPower(shotSpeed);
-            robot.ShooterUp.setPower(-shotSpeed);
 
+            if(shoot) {
+                robot.ShooterDown.setPower(shotSpeed);
+                robot.ShooterUp.setPower(-shotSpeed);
+            }
+        }
+
+        status = "forward for touch servo";
+        startPosL = robot.MotorL.getCurrentPosition();
+        lastClock = runtime.seconds();
+        robot.TouchServo.setPosition(0);
+        while (opModeIsActive() && (robot.MotorL.getCurrentPosition() < startPosL + 100) && beaconOneWrong) {
+            robot.MotorL.setPower(.3 * vl);
+            robot.MotorR.setPower(.3 * vr);
+            telemetry.addData("Status:", status);
+            telemetry.addData("currentPos - startPosL + 400", robot.MotorL.getCurrentPosition() - startPosL - 100);
+            telemetry.addData("beaconOneCount", beaconOneCount);
+            telemetry.addData("beaconOneDone", beaconOneDone);
+            telemetry.update();
+
+            if(shoot) {
+                robot.ShooterDown.setPower(shotSpeed);
+                robot.ShooterUp.setPower(-shotSpeed);
+            }
         }
 
         status = "turn paddles";
         telemetry.update();
         robot.MotorR.setPower(0);
         robot.MotorL.setPower(0);
-        robot.TouchServo.setPosition(0);
+        robot.TouchServo.setPosition(0);//in
         startPosL = robot.MotorL.getCurrentPosition();
         runtime.reset();
         while (opModeIsActive() && runtime.seconds() < .5) {
@@ -245,8 +313,11 @@ public class TwoShootCenterRed extends LinearOpMode {
                 robot.PressServoR.setPosition(1);//right in
                 robot.PressServoL.setPosition(1);//left out
             }
-            robot.ShooterDown.setPower(shotSpeed);
-            robot.ShooterUp.setPower(-shotSpeed);
+
+            if(shoot) {
+                robot.ShooterDown.setPower(shotSpeed);
+                robot.ShooterUp.setPower(-shotSpeed);
+            }
         }
 
         status = "backward and press buttons, beacon 1";
@@ -274,9 +345,93 @@ public class TwoShootCenterRed extends LinearOpMode {
                 }
             }
 
-            robot.ShooterDown.setPower(shotSpeed);
-            robot.ShooterUp.setPower(-shotSpeed);
+            if(shoot) {
+                robot.ShooterDown.setPower(shotSpeed);
+                robot.ShooterUp.setPower(-shotSpeed);
+            }
         }
+
+        status ="check correct color";
+        lastClock = runtime.seconds();
+        while (opModeIsActive() && runtime.seconds() < lastClock + .1){
+            if(robot.FruitySensor.blue() > robot.FruitySensor.red()){
+                beaconOneWrong = true;
+            }
+
+            if(shoot) {
+                robot.ShooterDown.setPower(shotSpeed);
+                robot.ShooterUp.setPower(-shotSpeed);
+            }
+        }
+
+        status = "forward if wrong color";
+        startPosL = robot.MotorL.getCurrentPosition();
+        lastClock = runtime.seconds();
+        while (opModeIsActive() && (robot.MotorL.getCurrentPosition() < startPosL + 100) && beaconOneWrong) {
+            robot.MotorL.setPower(.3 * vl);
+            robot.MotorR.setPower(.3 * vr);
+            telemetry.addData("Status:", status);
+            telemetry.addData("currentPos - startPosL + 400", robot.MotorL.getCurrentPosition() - startPosL - 100);
+            telemetry.addData("beaconOneCount", beaconOneCount);
+            telemetry.addData("beaconOneDone", beaconOneDone);
+            telemetry.update();
+
+            if(shoot) {
+                robot.ShooterDown.setPower(shotSpeed);
+                robot.ShooterUp.setPower(-shotSpeed);
+            }
+        }
+
+        status = "wait if wrong color";
+        telemetry.update();
+        startPosL = robot.MotorL.getCurrentPosition();
+        runtime.reset();
+        while (opModeIsActive() && (runtime.seconds() < 5.2) && beaconOneWrong ) {
+            robot.MotorL.setPower(0);
+            robot.MotorR.setPower(0);
+            telemetry.addData("Status:", status);
+            telemetry.addData("MotorL to go", robot.MotorL.getCurrentPosition() - startPosL + 1250);
+            telemetry.update();
+
+            if(shoot) {
+                robot.ShooterDown.setPower(shotSpeed);
+                robot.ShooterUp.setPower(-shotSpeed);
+            }
+        }
+        robot.MotorL.setPower(0);
+        robot.MotorR.setPower(0);
+
+        status = "backward and press buttons, beacon 1, second try";
+        startPosL = robot.MotorL.getCurrentPosition();
+        lastPosL = robot.MotorL.getCurrentPosition();
+        lastPosR = robot.MotorR.getCurrentPosition();
+        lastClock = runtime.seconds();
+        while (opModeIsActive() && (robot.MotorL.getCurrentPosition() > startPosL - 200) && beaconOneWrong) {
+            robot.MotorL.setPower(-.3 * vl);
+            robot.MotorR.setPower(-.3 * vr);
+
+            telemetry.addData("Status:", status);
+            telemetry.addData("currentPos - startPosL + 400", robot.MotorL.getCurrentPosition() - startPosL + 200);
+            telemetry.addData("beaconOneCount", beaconOneCount);
+            telemetry.addData("beaconOneDone", beaconOneDone);
+            telemetry.update();
+
+            if(runtime.seconds() - lastClock > 1.7){
+                lastPosL = robot.MotorL.getCurrentPosition();
+                lastPosR = robot.MotorR.getCurrentPosition();
+                lastClock = runtime.seconds();
+                if((Math.abs(lastPosL - robot.MotorL.getCurrentPosition()) < 90)
+                        && (Math.abs(lastPosR - robot.MotorR.getCurrentPosition()) < 90)){
+                    beaconOneDone = true;
+                }
+            }
+
+            if(shoot) {
+                robot.ShooterDown.setPower(shotSpeed);
+                robot.ShooterUp.setPower(-shotSpeed);
+            }
+        }
+
 
         status = "forward off beacon 1";
         telemetry.update();
@@ -288,61 +443,64 @@ public class TwoShootCenterRed extends LinearOpMode {
             telemetry.addData("MotorL to go", robot.MotorL.getCurrentPosition() - startPosL - 850);
             telemetry.update();
 
-            robot.ShooterDown.setPower(shotSpeed);
-            robot.ShooterUp.setPower(-shotSpeed);
+            if(shoot) {
+                robot.ShooterDown.setPower(shotSpeed);
+                robot.ShooterUp.setPower(-shotSpeed);
+            }
         }
         robot.MotorL.setPower(0);
         robot.MotorR.setPower(0);
 
-        status = "shoot first ball";
-        runtime.reset();
-        while (opModeIsActive() && runtime.seconds() < 1.5) {
-            shot = shotSpeed;
-            robot.ShotFeeder.setPosition(0);//shoot
-            robot.ShooterDown.setPower(shot);
-            robot.ShooterUp.setPower(-shot);
-            telemetry.addData("shot", shot);
-            telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
-            telemetry.addData("Status:", status);
-            telemetry.update();
+        if(shoot) {
+            status = "shoot first ball";
+            runtime.reset();
+            while (opModeIsActive() && runtime.seconds() < 1.5) {
+                shot = shotSpeed;
+                robot.ShotFeeder.setPosition(0);//shoot
+                robot.ShooterDown.setPower(shot);
+                robot.ShooterUp.setPower(-shot);
+                telemetry.addData("shot", shot);
+                telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
+                telemetry.addData("Status:", status);
+                telemetry.update();
 
-            robot.ConveyorServo.setPosition(1);//out
+                robot.ConveyorServo.setPosition(1);//out
+            }
+
+            status = "feed second ball";
+            robot.TouchServo.setPosition(.37);//out so paddles don't hit
+            runtime.reset();
+            while (opModeIsActive() && runtime.seconds() < 2) {
+                robot.PressServoL.setPosition(.6);//out part of the way
+                robot.PressServoR.setPosition(.4);//out part of the way
+                robot.TouchServo.setPosition(.377);
+                robot.ShotFeeder.setPosition(.9);//down
+                telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
+                telemetry.addData("Status:", status);
+                telemetry.update();
+
+                robot.Conveyor.setPower(.7);
+            }
+            robot.Conveyor.setPower(0);
+            robot.ConveyorServo.setPosition(0);//in
+            robot.TouchServo.setPosition(0);//in
+
+            status = "shoot second ball";
+            robot.Conveyor.setPower(0);
+            runtime.reset();
+            while (opModeIsActive() && runtime.seconds() < 1.5) {
+                shot = shotSpeed;
+                robot.ShotFeeder.setPosition(0);//shoot
+                robot.ShooterDown.setPower(shot);
+                robot.ShooterUp.setPower(-shot);
+                telemetry.addData("shot", shot);
+                telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
+                telemetry.addData("Status:", status);
+                telemetry.update();
+            }
+            robot.PressServoL.setPosition(0);//left in
+            robot.PressServoR.setPosition(1);//left in
         }
-
-        status = "feed second ball";
-        robot.TouchServo.setPosition(.15);//out so paddles don't hit
-        runtime.reset();
-        while (opModeIsActive() && runtime.seconds() < 2) {
-            robot.PressServoL.setPosition(.6);//out part of the way
-            robot.PressServoR.setPosition(.4);//out part of the way
-            robot.TouchServo.setPosition(0);
-            robot.ShotFeeder.setPosition(.9);//down
-            telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
-            telemetry.addData("Status:", status);
-            telemetry.update();
-
-            robot.Conveyor.setPower(.7);
-        }
-        robot.Conveyor.setPower(0);
-        robot.ConveyorServo.setPosition(0);//in
-        robot.TouchServo.setPosition(0);//in
-
-        status = "shoot second ball";
-        robot.Conveyor.setPower(0);
-        runtime.reset();
-        while (opModeIsActive() && runtime.seconds() < 1.5) {
-            shot = shotSpeed;
-            robot.ShotFeeder.setPosition(0);//shoot
-            robot.ShooterDown.setPower(shot);
-            robot.ShooterUp.setPower(-shot);
-            telemetry.addData("shot", shot);
-            telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
-            telemetry.addData("Status:", status);
-            telemetry.update();
-        }
-
-        robot.PressServoL.setPosition(0);//left in
-        robot.PressServoR.setPosition(1);//left in
 
         status = "forward off beacon 1";
         telemetry.update();
@@ -354,8 +512,10 @@ public class TwoShootCenterRed extends LinearOpMode {
             telemetry.addData("MotorL to go", robot.MotorL.getCurrentPosition() - startPosL - 1000);
             telemetry.update();
 
-            robot.ShooterDown.setPower(shot);
-            robot.ShooterUp.setPower(-shot);
+            if(shoot) {
+                robot.ShooterDown.setPower(shotSpeed);
+                robot.ShooterUp.setPower(-shotSpeed);
+            }
         }
         robot.MotorL.setPower(0);
         robot.MotorR.setPower(0);
@@ -372,14 +532,16 @@ public class TwoShootCenterRed extends LinearOpMode {
             telemetry.addData("MotorL to go", robot.MotorL.getCurrentPosition() - startPosL + 1050);
             telemetry.update();
 
-            robot.ShooterDown.setPower(shot);
-            robot.ShooterUp.setPower(-shot);
+            if(shoot) {
+                robot.ShooterDown.setPower(shotSpeed);
+                robot.ShooterUp.setPower(-shotSpeed);
+            }
         }
         robot.MotorL.setPower(0);
         robot.MotorR.setPower(0);
 
         status = "drive until white line";
-        robot.TouchServo.setPosition(.55);
+        robot.TouchServo.setPosition(1);
         startPosL = robot.MotorL.getCurrentPosition();
         while (opModeIsActive() && (robot.MotorL.getCurrentPosition() > startPosL - 3700) && !longDriveDone) {//stop if hit line or go certain distance
             robot.MotorL.setPower(-.85 * vl);
@@ -391,20 +553,20 @@ public class TwoShootCenterRed extends LinearOpMode {
             telemetry.addData("sensorColor:", robot.ColSensor.blue());
             telemetry.update();
 
-            if(shot > 0.18) {
-                shot -= 0.02;
-                robot.ShotFeeder.setPosition(.9);
-                robot.ShooterDown.setPower(shot);
-                robot.ShooterUp.setPower(-shot);
-            }
-            else if(shot < 0.18 && shot > 0){
-                shot -= 0.0025;
-                robot.ShooterDown.setPower(shot);
-                robot.ShooterUp.setPower(-shot);
-            }
-            else{
-                robot.ShooterDown.setPower(0);
-                robot.ShooterUp.setPower(0);
+            if(shoot) {
+                if (shot > 0.18) {
+                    shot -= 0.02;
+                    robot.ShotFeeder.setPosition(.9);
+                    robot.ShooterDown.setPower(shot);
+                    robot.ShooterUp.setPower(-shot);
+                } else if (shot < 0.18 && shot > 0) {
+                    shot -= 0.0025;
+                    robot.ShooterDown.setPower(shot);
+                    robot.ShooterUp.setPower(-shot);
+                } else {
+                    robot.ShooterDown.setPower(0);
+                    robot.ShooterUp.setPower(0);
+                }
             }
 
             telemetry.addData("Shot:", shot);
@@ -437,8 +599,8 @@ public class TwoShootCenterRed extends LinearOpMode {
             telemetry.addData("change in time", runtime.seconds() - lastClock);
             telemetry.addData("Status:", status);
             telemetry.update();
-            robot.MotorL.setPower(-.3 * vl);
-            robot.MotorR.setPower(.3 * vr);
+            robot.MotorL.setPower(-.34 * vl);
+            robot.MotorR.setPower(.34 * vr);
 
             if(runtime.seconds() - lastClock > 2.7){
                 lastPosL = robot.MotorL.getCurrentPosition();
@@ -459,6 +621,32 @@ public class TwoShootCenterRed extends LinearOpMode {
             telemetry.addData("turnOneCount", turnOneCount);
         }
 
+        status = "wait";
+        telemetry.update();
+        startPosL = robot.MotorL.getCurrentPosition();
+        runtime.reset();
+        while (opModeIsActive() && runtime.seconds() < 0.2) {
+            robot.MotorL.setPower(0);
+            robot.MotorR.setPower(0);
+            telemetry.addData("Status:", status);
+            telemetry.addData("MotorL to go", robot.MotorL.getCurrentPosition() - startPosL + 1250);
+            telemetry.update();
+        }
+        robot.MotorL.setPower(0);
+        robot.MotorR.setPower(0);
+
+        status = "turn a bit";
+        telemetry.update();
+        startPosL = robot.MotorL.getCurrentPosition();
+        while (opModeIsActive() && robot.MotorL.getCurrentPosition() < startPosL + 110) {
+            robot.MotorL.setPower(.3 * vl);
+            robot.MotorR.setPower(-.3 * vr);
+            telemetry.addData("Status:", status);
+            telemetry.addData("MotorL to go", robot.MotorL.getCurrentPosition() - startPosL + 1250);
+            telemetry.update();
+        }
+        robot.MotorL.setPower(0);
+        robot.MotorR.setPower(0);
 
         status = "line follow, beacon 2";
         startPosL = robot.MotorL.getCurrentPosition();
@@ -513,6 +701,25 @@ public class TwoShootCenterRed extends LinearOpMode {
             }
         }
 
+        status = "forward for touch servo";
+        startPosL = robot.MotorL.getCurrentPosition();
+        lastClock = runtime.seconds();
+        robot.TouchServo.setPosition(0);
+        while (opModeIsActive() && (robot.MotorL.getCurrentPosition() < startPosL + 100) && beaconOneWrong) {
+            robot.MotorL.setPower(.3 * vl);
+            robot.MotorR.setPower(.3 * vr);
+            telemetry.addData("Status:", status);
+            telemetry.addData("currentPos - startPosL + 400", robot.MotorL.getCurrentPosition() - startPosL - 100);
+            telemetry.addData("beaconOneCount", beaconOneCount);
+            telemetry.addData("beaconOneDone", beaconOneDone);
+            telemetry.update();
+
+            if(shoot) {
+                robot.ShooterDown.setPower(shotSpeed);
+                robot.ShooterUp.setPower(-shotSpeed);
+            }
+        }
+
         status = "turn paddles, beacon 2";
         telemetry.update();
         robot.MotorR.setPower(0);
@@ -555,7 +762,73 @@ public class TwoShootCenterRed extends LinearOpMode {
             }
         }
 
-        /*status = "forward off beacon 2";
+        status ="check correct color";
+        lastClock = runtime.seconds();
+        while (opModeIsActive() && runtime.seconds() < lastClock + .1){
+            if(robot.FruitySensor.blue() > robot.FruitySensor.red()){
+                beaconTwoWrong = true;
+            }
+        }
+
+        status = "forward if wrong color";
+        startPosL = robot.MotorL.getCurrentPosition();
+        lastClock = runtime.seconds();
+        while (opModeIsActive() && (robot.MotorL.getCurrentPosition() < startPosL + 100) && beaconTwoWrong) {
+            robot.MotorL.setPower(.3 * vl);
+            robot.MotorR.setPower(.3 * vr);
+            telemetry.addData("Status:", status);
+            telemetry.addData("currentPos - startPosL + 400", robot.MotorL.getCurrentPosition() - startPosL - 100);
+            telemetry.addData("beaconOneCount", beaconOneCount);
+            telemetry.addData("beaconOneDone", beaconOneDone);
+            telemetry.update();
+
+            robot.ShooterDown.setPower(shotSpeed);
+            robot.ShooterUp.setPower(-shotSpeed);
+        }
+
+        status = "wait if wrong color";
+        telemetry.update();
+        startPosL = robot.MotorL.getCurrentPosition();
+        runtime.reset();
+        while (opModeIsActive() && (runtime.seconds() < 5.2) && beaconTwoWrong ) {
+            robot.MotorL.setPower(0);
+            robot.MotorR.setPower(0);
+            telemetry.addData("Status:", status);
+            telemetry.addData("MotorL to go", robot.MotorL.getCurrentPosition() - startPosL + 1250);
+            telemetry.update();
+        }
+        robot.MotorL.setPower(0);
+        robot.MotorR.setPower(0);
+
+        status = "backward and press buttons, beacon 1, second try";
+        startPosL = robot.MotorL.getCurrentPosition();
+        lastPosL = robot.MotorL.getCurrentPosition();
+        lastPosR = robot.MotorR.getCurrentPosition();
+        lastClock = runtime.seconds();
+        while (opModeIsActive() && (robot.MotorL.getCurrentPosition() > startPosL - 200) && beaconTwoWrong) {
+            robot.MotorL.setPower(-.3 * vl);
+            robot.MotorR.setPower(-.3 * vr);
+
+            telemetry.addData("Status:", status);
+            telemetry.addData("currentPos - startPosL + 400", robot.MotorL.getCurrentPosition() - startPosL + 200);
+            telemetry.addData("beaconOneCount", beaconOneCount);
+            telemetry.addData("beaconOneDone", beaconOneDone);
+            telemetry.update();
+
+            if(runtime.seconds() - lastClock > 1.7){
+                lastPosL = robot.MotorL.getCurrentPosition();
+                lastPosR = robot.MotorR.getCurrentPosition();
+                lastClock = runtime.seconds();
+                if((Math.abs(lastPosL - robot.MotorL.getCurrentPosition()) < 90)
+                        && (Math.abs(lastPosR - robot.MotorR.getCurrentPosition()) < 90)){
+                    beaconOneDone = true;
+                }
+            }
+            robot.ShooterDown.setPower(shotSpeed);
+            robot.ShooterUp.setPower(-shotSpeed);
+        }
+
+        status = "forward off beacon 2";
         telemetry.update();
         startPosL = robot.MotorL.getCurrentPosition();
         while (opModeIsActive() && robot.MotorL.getCurrentPosition() < startPosL + 1000) {
@@ -592,7 +865,7 @@ public class TwoShootCenterRed extends LinearOpMode {
             telemetry.addData("Status:", status);
             telemetry.addData("MotorL to go", robot.MotorL.getCurrentPosition() - startPosL - 4500);
             telemetry.update();
-        }*/
+        }
         robot.MotorL.setPower(0);
         robot.MotorR.setPower(0);
         }

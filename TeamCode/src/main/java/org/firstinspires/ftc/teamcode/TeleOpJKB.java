@@ -32,6 +32,7 @@ public class TeleOpJKB extends OpMode{
     double startPosR;
     boolean backdone = false;
     double reduceSpeed = 1;
+    double touchStep = 0;
 
     /*
         public TeleOpJKB(){
@@ -58,6 +59,19 @@ public class TeleOpJKB extends OpMode{
     @Override
     public void loop(){
         telemetry.addData("Loop", "Running");
+
+        //just to test touch servo
+        /*if(gamepad1.dpad_up){
+            touchStep+= 0.005;
+            robot.TouchServo.setPosition(touchStep);
+        }
+
+        if(gamepad1.dpad_down){
+            touchStep-= .005;
+            robot.TouchServo.setPosition(touchStep);
+        }*/
+
+        telemetry.addData("touchStep", touchStep);
 
 
         //DRIVING
