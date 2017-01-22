@@ -71,12 +71,12 @@ public class TwoShootCenterRed extends LinearOpMode {
         robot.init(hardwareMap);
 
         double startPosL = robot.MotorL.getCurrentPosition();
-        robot.LiftServo.setPosition(.05);
+        robot.LiftServo.setPosition(0);
         robot.ShotFeeder.setPosition(.9);
-        robot.ConveyorServo.setPosition(0);//in
+        robot.CapGateServo.setPosition(1);//in
         robot.PressServoR.setPosition(1);//in
         robot.PressServoL.setPosition(0);//in
-        robot.TouchServo.setPosition(0);
+        robot.TouchServo.setPosition(.1);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");
@@ -85,6 +85,8 @@ public class TwoShootCenterRed extends LinearOpMode {
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
+
+        robot.CapGateServo.setPosition(.85);
 
         //shoot first ball then move servo so it can help hold up the ball..
 
@@ -101,7 +103,6 @@ public class TwoShootCenterRed extends LinearOpMode {
             }
             robot.MotorL.setPower(-.85 * vl);
             robot.MotorR.setPower(-.85 * vr);
-            robot.TouchServo.setPosition(1);//out
             robot.PressServoL.setPosition(0);//in
             telemetry.addData("Status:", status);
             telemetry.addData("MotorL current", robot.MotorL.getCurrentPosition() - startPosL);
@@ -141,6 +142,7 @@ public class TwoShootCenterRed extends LinearOpMode {
         }
 
         status = "turn until white line";
+        robot.TouchServo.setPosition(1);//out
         turnOneCount = 0;
         lastPosL = robot.MotorL.getCurrentPosition();
         lastPosR = robot.MotorR.getCurrentPosition();
@@ -463,8 +465,6 @@ public class TwoShootCenterRed extends LinearOpMode {
                 telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
                 telemetry.addData("Status:", status);
                 telemetry.update();
-
-                robot.ConveyorServo.setPosition(1);//out
             }
 
             status = "feed second ball";
@@ -482,7 +482,6 @@ public class TwoShootCenterRed extends LinearOpMode {
                 robot.Conveyor.setPower(.7);
             }
             robot.Conveyor.setPower(0);
-            robot.ConveyorServo.setPosition(0);//in
             robot.TouchServo.setPosition(0);//in
 
             status = "shoot second ball";
@@ -824,8 +823,6 @@ public class TwoShootCenterRed extends LinearOpMode {
                     beaconOneDone = true;
                 }
             }
-            robot.ShooterDown.setPower(shotSpeed);
-            robot.ShooterUp.setPower(-shotSpeed);
         }
 
         status = "forward off beacon 2";
