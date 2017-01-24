@@ -829,7 +829,7 @@ public class TwoShootCenterBlue extends LinearOpMode {
         lastPosL = robot.MotorL.getCurrentPosition();
         lastPosR = robot.MotorR.getCurrentPosition();
         lastClock = runtime.seconds();
-        while (opModeIsActive() && (robot.MotorL.getCurrentPosition() > startPosL - 200) && !beaconTwoDone) {
+        while (opModeIsActive() && (robot.MotorL.getCurrentPosition() > startPosL - 300) && !beaconTwoDone) {
             robot.MotorL.setPower(-.5 * vl);
             robot.MotorR.setPower(-.5 * vr);
             telemetry.addData("Status:", status);

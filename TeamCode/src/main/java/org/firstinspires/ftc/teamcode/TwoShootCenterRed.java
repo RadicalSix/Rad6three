@@ -284,7 +284,7 @@ public class TwoShootCenterRed extends LinearOpMode {
         status = "turn a bit";
         telemetry.update();
         startPosR = robot.MotorR.getCurrentPosition();
-        while (opModeIsActive() && robot.MotorR.getCurrentPosition() > startPosR - 70) {//motorR is reversed
+        while (opModeIsActive() && robot.MotorR.getCurrentPosition() < startPosR + 70) {//motorR is reversed
             robot.MotorL.setPower(-.38 * vl);
             robot.MotorR.setPower(.38 * vr);
             telemetry.addData("Status:", status);
@@ -327,11 +327,11 @@ public class TwoShootCenterRed extends LinearOpMode {
         startPosL = robot.MotorL.getCurrentPosition();
         lastClock = runtime.seconds();
         robot.TouchServo.setPosition(.1);//in
-        while (opModeIsActive() && (robot.MotorL.getCurrentPosition() < startPosL + 100) && beaconOneWrong) {
+        while (opModeIsActive() && (robot.MotorL.getCurrentPosition() < startPosL + 200)) {
             robot.MotorL.setPower(.3 * vl);
             robot.MotorR.setPower(.3 * vr);
             telemetry.addData("Status:", status);
-            telemetry.addData("currentPos - startPosL + 400", robot.MotorL.getCurrentPosition() - startPosL - 100);
+            telemetry.addData("currentPos - startPosL + 400", robot.MotorL.getCurrentPosition() - startPosL - 200);
             telemetry.update();
 
             if (shoot) {
@@ -368,7 +368,7 @@ public class TwoShootCenterRed extends LinearOpMode {
         lastPosL = robot.MotorL.getCurrentPosition();
         lastPosR = robot.MotorR.getCurrentPosition();
         lastClock = runtime.seconds();
-        while (opModeIsActive() && (robot.MotorL.getCurrentPosition() > startPosL - 300) && !beaconOneDone) {
+        while (opModeIsActive() && (robot.MotorL.getCurrentPosition() > startPosL - 350) && !beaconOneDone) {
             robot.MotorL.setPower(-.5 * vl);
             robot.MotorR.setPower(-.5 * vr);
 
@@ -665,8 +665,8 @@ public class TwoShootCenterRed extends LinearOpMode {
             telemetry.addData("change in time", runtime.seconds() - lastClock);
             telemetry.addData("Status:", status);
             telemetry.update();
-            robot.MotorL.setPower(-.39 * vl);
-            robot.MotorR.setPower(.39 * vr);
+            robot.MotorL.setPower(-.41 * vl);
+            robot.MotorR.setPower(.41 * vr);
 
             if (runtime.seconds() - lastClock > 2.7) {
                 lastPosL = robot.MotorL.getCurrentPosition();
@@ -769,12 +769,12 @@ public class TwoShootCenterRed extends LinearOpMode {
 
         status = "turn a bit";
         telemetry.update();
-        startPosL = robot.MotorL.getCurrentPosition();
-        while (opModeIsActive() && robot.MotorL.getCurrentPosition() > startPosL - 70) {
-            robot.MotorL.setPower(-.3 * vl);
-            robot.MotorR.setPower(.3 * vr);
+        startPosR = robot.MotorR.getCurrentPosition();
+        while (opModeIsActive() && robot.MotorR.getCurrentPosition() < startPosR + 70) {
+            robot.MotorL.setPower(-.35 * vl);
+            robot.MotorR.setPower(.35 * vr);
             telemetry.addData("Status:", status);
-            telemetry.addData("MotorL to go", robot.MotorL.getCurrentPosition() - startPosL + 1250);
+            telemetry.addData("MotorR to go", robot.MotorR.getCurrentPosition() - startPosL - 70);
             telemetry.update();
         }
         robot.MotorL.setPower(0);
@@ -801,7 +801,7 @@ public class TwoShootCenterRed extends LinearOpMode {
         startPosL = robot.MotorL.getCurrentPosition();
         lastClock = runtime.seconds();
         robot.TouchServo.setPosition(.1);
-        while (opModeIsActive() && (robot.MotorL.getCurrentPosition() < startPosL + 100) && beaconOneWrong) {
+        while (opModeIsActive() && (robot.MotorL.getCurrentPosition() < startPosL + 100)) {
             robot.MotorL.setPower(.3 * vl);
             robot.MotorR.setPower(.3 * vr);
             telemetry.addData("Status:", status);
@@ -836,7 +836,7 @@ public class TwoShootCenterRed extends LinearOpMode {
         lastPosL = robot.MotorL.getCurrentPosition();
         lastPosR = robot.MotorR.getCurrentPosition();
         lastClock = runtime.seconds();
-        while (opModeIsActive() && (robot.MotorL.getCurrentPosition() > startPosL - 200) && !beaconTwoDone) {
+        while (opModeIsActive() && (robot.MotorL.getCurrentPosition() > startPosL - 300) && !beaconTwoDone) {
             robot.MotorL.setPower(-.5 * vl);
             robot.MotorR.setPower(-.5 * vr);
             telemetry.addData("Status:", status);
