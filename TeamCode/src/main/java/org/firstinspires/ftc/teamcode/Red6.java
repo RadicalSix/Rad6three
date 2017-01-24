@@ -397,7 +397,7 @@ public class Red6 extends LinearOpMode {
         status = "check correct color";
         lastClock = runtime.seconds();
         runtime.reset();
-        while (opModeIsActive() && runtime.seconds() < 1) {//.1 1/22
+        while (opModeIsActive() && runtime.seconds() < 1.1) {//.1 1/22
             telemetry.addData("blue-red", robot.FruitySensor.blue() - robot.FruitySensor.red());
             telemetry.addData("blue", robot.FruitySensor.blue());
             telemetry.addData("red", robot.FruitySensor.red());
@@ -863,7 +863,7 @@ public class Red6 extends LinearOpMode {
         status = "check correct color";
         lastClock = runtime.seconds();
         runtime.reset();
-        while (opModeIsActive() && runtime.seconds() < 1) {//.1 1/22
+        while (opModeIsActive() && runtime.seconds() < 1.1) {//.1 1/22
             telemetry.addData("blue-red", robot.FruitySensor.blue() - robot.FruitySensor.red());
             telemetry.addData("blue", robot.FruitySensor.blue());
             telemetry.addData("red", robot.FruitySensor.red());
