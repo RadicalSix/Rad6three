@@ -152,7 +152,7 @@ public class TeleOpJKB extends OpMode{
             shotspeed = .64;
         }
 
-        if(gamepad2.y && robot.LiftServo.getPosition() < .8){//on
+        if(gamepad2.y && robot.LiftServo.getPosition() == .88){//on
             robot.PressServoL.setPosition(1);
             shot = 1;
         }

@@ -80,7 +80,7 @@ public class TwoShootCenterBlue extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-        robot.CapGateServo.setPosition(.85);
+        robot.CapGateServo.setPosition(.7);
         //shoot first ball then move servo so it can help hold up the ball..
 
         status = "Start, move servo";
@@ -382,9 +382,6 @@ public class TwoShootCenterBlue extends LinearOpMode {
                     beaconOneDone = true;
                 }
             }*/
-            robot.MotorR.setPower(0);
-            robot.MotorL.setPower(0);
-
             if(shoot) {
                 robot.ShooterDown.setPower(shotSpeed);
                 robot.ShooterUp.setPower(-shotSpeed);

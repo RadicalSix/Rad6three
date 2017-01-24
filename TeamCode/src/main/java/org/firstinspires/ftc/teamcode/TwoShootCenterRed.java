@@ -56,6 +56,7 @@ public class TwoShootCenterRed extends LinearOpMode {
     int turnTwoCount = 0;
     int followOneCount = 0;
     int turnOneCount = 0;
+    double startPosR = 0;
     String status = "Start";
 
 
@@ -86,7 +87,7 @@ public class TwoShootCenterRed extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-        robot.CapGateServo.setPosition(.85);
+        robot.CapGateServo.setPosition(.5);
 
         //shoot first ball then move servo so it can help hold up the ball..
 
@@ -97,7 +98,7 @@ public class TwoShootCenterRed extends LinearOpMode {
         startPosL = robot.MotorL.getCurrentPosition();
         status = "drive back until white line";
         shot = 0;
-        while (opModeIsActive() && robot.MotorL.getCurrentPosition() > startPosL - 4200 && !doneDrive1) {//stop if hit line or go certain distance
+        while (opModeIsActive() && robot.MotorL.getCurrentPosition() > startPosL - 4350 && !doneDrive1) {//stop if hit line or go certain distance
             if (robot.ColSensor.blue() > 20) {
                 doneDrive1 = true;//hit white line
             }
@@ -126,8 +127,8 @@ public class TwoShootCenterRed extends LinearOpMode {
 
         status = "drive back past line";
         startPosL = robot.MotorL.getCurrentPosition();
-        robot.MotorL.setPower(-.3 * vl);
-        robot.MotorR.setPower(-.3 * vr);
+        robot.MotorL.setPower(-.35 * vl);
+        robot.MotorR.setPower(-.35 * vr);
         while (opModeIsActive() && (robot.MotorL.getCurrentPosition() > startPosL - 950) && doneDrive1) {//only does this step if hit white line
             telemetry.addData("Status:", status);
             telemetry.addData("MotorL units to go", robot.MotorL.getCurrentPosition() - startPosL + 950);
@@ -153,8 +154,8 @@ public class TwoShootCenterRed extends LinearOpMode {
             telemetry.addData("change in time", runtime.seconds() - lastClock);
             telemetry.addData("Status:", status);
             telemetry.update();
-            robot.MotorL.setPower(-.34 * vl);
-            robot.MotorR.setPower(.34 * vr);
+            robot.MotorL.setPower(-.39 * vl);
+            robot.MotorR.setPower(.39 * vr);
 
             /*if(runtime.seconds() - lastClock > 1.7){
                 lastPosL = robot.MotorL.getCurrentPosition();
@@ -282,12 +283,12 @@ public class TwoShootCenterRed extends LinearOpMode {
 
         status = "turn a bit";
         telemetry.update();
-        startPosL = robot.MotorL.getCurrentPosition();
-        while (opModeIsActive() && robot.MotorL.getCurrentPosition() > startPosL - 70) {
-            robot.MotorL.setPower(-.3 * vl);
-            robot.MotorR.setPower(.3 * vr);
+        startPosR = robot.MotorR.getCurrentPosition();
+        while (opModeIsActive() && robot.MotorR.getCurrentPosition() > startPosR - 70) {//motorR is reversed
+            robot.MotorL.setPower(-.38 * vl);
+            robot.MotorR.setPower(.38 * vr);
             telemetry.addData("Status:", status);
-            telemetry.addData("MotorL to go", robot.MotorL.getCurrentPosition() - startPosL + 70);
+            telemetry.addData("MotorR to go", robot.MotorR.getCurrentPosition() - startPosR + 70);
             telemetry.update();
 
             if (shoot) {
@@ -664,8 +665,8 @@ public class TwoShootCenterRed extends LinearOpMode {
             telemetry.addData("change in time", runtime.seconds() - lastClock);
             telemetry.addData("Status:", status);
             telemetry.update();
-            robot.MotorL.setPower(-.34 * vl);
-            robot.MotorR.setPower(.34 * vr);
+            robot.MotorL.setPower(-.39 * vl);
+            robot.MotorR.setPower(.39 * vr);
 
             if (runtime.seconds() - lastClock > 2.7) {
                 lastPosL = robot.MotorL.getCurrentPosition();
