@@ -43,7 +43,7 @@ public class TeleOpJKB extends OpMode{
     public void init() {
 
         robot.init(hardwareMap);
-        robot.LiftServo.setPosition(0);
+        robot.LiftServo.setPosition(.88);
         robot.ShotFeeder.setPosition(.9);
         robot.PressServoR.setPosition(1);
         robot.PressServoL.setPosition(0);
@@ -228,6 +228,20 @@ public class TeleOpJKB extends OpMode{
             robot.Conveyor.setPower(0);
         }
 
+
+
+
+        //LIFT
+        double h = -gamepad2.left_stick_y;
+        telemetry.addData("h", h);
+        if(((h > 0.05) || (h < -0.05)) && (robot.LiftServo.getPosition() == .05)){//does not lift unless servo out of way
+            robot.Lift.setPower(h);
+        }
+        else{
+            robot.Lift.setPower(0);
+        }
+
+        //Cap Gate
         if(gamepad2.b){
             robot.CapGateServo.setPosition(1);//out
         }
@@ -236,26 +250,12 @@ public class TeleOpJKB extends OpMode{
         }
 
 
-
-
-
-        //LIFT
-        double h = -gamepad2.left_stick_y;
-        telemetry.addData("h", h);
-        if(((h > 0.05) || (h < -0.05)) && (robot.LiftServo.getPosition() == .88)){//does not lift unless servo out of way
-            robot.Lift.setPower(h);
-        }
-        else{
-            robot.Lift.setPower(0);
-        }
-
-
         //LiftServo up
         if(gamepad2.left_bumper){
-            robot.LiftServo.setPosition(.88);//up
+            robot.LiftServo.setPosition(.05);//up
         }
         if(gamepad2.left_trigger > .5){
-            robot.LiftServo.setPosition(.05);//down
+            robot.LiftServo.setPosition(.88);//down
         }
 
 
@@ -284,7 +284,7 @@ public class TeleOpJKB extends OpMode{
         //both out
         if(gamepad2.dpad_up){
             robot.TouchServo.setPosition(0);
-            robot.PressServoL.setPosition(0.8);
+            robot.PressServoL.setPosition(1);
             robot.PressServoR.setPosition(0);
         }
 

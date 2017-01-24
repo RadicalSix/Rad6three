@@ -59,7 +59,7 @@ public class Shoot extends LinearOpMode{
 
         robot.LiftServo.setPosition(.05);//down
         robot.ShotFeeder.setPosition(.9);//down
-        robot.ConveyorServo.setPosition(0);//in
+        robot.CapGateServo.setPosition(0);//in
         robot.PressServoR.setPosition(1);//in
         robot.PressServoL.setPosition(0);//in
         robot.TouchServo.setPosition(0);//in
@@ -99,7 +99,7 @@ public class Shoot extends LinearOpMode{
             telemetry.addData("Status:", status);
             telemetry.update();
 
-            robot.ConveyorServo.setPosition(1);//out
+            robot.CapGateServo.setPosition(1);//out
         }
 
         status = "feed second ball";
@@ -117,7 +117,7 @@ public class Shoot extends LinearOpMode{
             robot.Conveyor.setPower(.7);
         }
         robot.Conveyor.setPower(0);
-        robot.ConveyorServo.setPosition(0);//in
+        robot.CapGateServo.setPosition(0);//in
         robot.TouchServo.setPosition(0);//in
 
         status = "shoot second ball";

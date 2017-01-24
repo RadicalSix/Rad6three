@@ -62,7 +62,7 @@ public class TwoCenterBlue extends LinearOpMode {
         double startPosL = robot.MotorL.getCurrentPosition();
         robot.LiftServo.setPosition(.05);
         robot.ShotFeeder.setPosition(.9);
-        robot.ConveyorServo.setPosition(0);//in
+        robot.CapGateServo.setPosition(0);//in
         robot.PressServoR.setPosition(1);//in
         robot.PressServoL.setPosition(0);//in
         robot.TouchServo.setPosition(0);
