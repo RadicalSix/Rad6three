@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 //LinearOpMode
 
-@Autonomous(name = "ShootCenter", group = "Auto")
+//@Autonomous(name = "ShootCenter", group = "Auto")
 
 public class ShootCenter extends LinearOpMode{
 

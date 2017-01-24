@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 //LinearOpMode
     //started 12/19 by Justin
 
-@Autonomous(name = "TwoCenterBlue", group = "Auto")
+//@Autonomous(name = "TwoCenterBlue", group = "Auto")
 
 public class TwoCenterBlue extends LinearOpMode {
 

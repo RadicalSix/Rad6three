@@ -19,7 +19,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 //LinearOpMode
     //started 12/19 by Justin
 
-@Autonomous(name = "TwoShootCenterRed", group = "Auto")
+//@Autonomous(name = "TwoShootCenterRed", group = "Auto")
 
 public class TwoShootCenterRed extends LinearOpMode {
 

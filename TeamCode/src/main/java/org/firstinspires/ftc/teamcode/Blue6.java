@@ -32,13 +32,13 @@ public class Blue6 extends LinearOpMode {
     Boolean beaconOneWrong = false;
     Boolean beaconTwoWrong = false;
 
-    Boolean shoot = false;//ARE WE SHOOTING THIS ROUND?
+    Boolean shoot = true;//ARE WE SHOOTING THIS ROUND?
 
 
 
     double vr = 1;//change for direction and battery
     double vl = 1;//change for direction and battery
-    double shotSpeed = .55;//change for battery, .39 1/22
+    double shotSpeed = .75;//change for battery, .55 1/24
     int step = 0;
     double shot = 0;
     double lastPosL = 0;
@@ -485,11 +485,11 @@ public class Blue6 extends LinearOpMode {
         robot.MotorL.setPower(0);
         robot.MotorR.setPower(0);
 
-        if(shoot) {
+        if(shoot && !beaconOneWrong) {
             status = "forward off beacon 1";
             telemetry.update();
             startPosL = robot.MotorL.getCurrentPosition();
-            while (opModeIsActive() && robot.MotorL.getCurrentPosition() < startPosL + 850) {
+            while (opModeIsActive() && robot.MotorL.getCurrentPosition() < startPosL + 1300) {
                 robot.MotorL.setPower(.9 * vl);//changed from .6 and .6 to turn to vortex
                 robot.MotorR.setPower(.55 * vr);
                 telemetry.addData("Status:", status);
@@ -566,11 +566,11 @@ public class Blue6 extends LinearOpMode {
             status = "forward after shoot";
             telemetry.update();
             startPosL = robot.MotorL.getCurrentPosition();
-            while (opModeIsActive() && robot.MotorL.getCurrentPosition() < startPosL + 1000) {
+            while (opModeIsActive() && robot.MotorL.getCurrentPosition() < startPosL + 550) {
                 robot.MotorL.setPower(.6 * vl);
                 robot.MotorR.setPower(.6 * vr);
                 telemetry.addData("Status:", status);
-                telemetry.addData("MotorL to go", robot.MotorL.getCurrentPosition() - startPosL - 1000);
+                telemetry.addData("MotorL to go", robot.MotorL.getCurrentPosition() - startPosL - 850);
                 telemetry.update();
 
                 if(shoot) {
@@ -582,7 +582,7 @@ public class Blue6 extends LinearOpMode {
             robot.MotorR.setPower(0);
         }
 
-        else if(!shoot){
+        else if(!shoot || beaconOneWrong){
             status = "forward after shoot";
             telemetry.update();
             startPosL = robot.MotorL.getCurrentPosition();
@@ -884,11 +884,6 @@ public class Blue6 extends LinearOpMode {
             telemetry.addData("blue", robot.FruitySensor.blue());
             telemetry.addData("red", robot.FruitySensor.red());
             telemetry.update();
-
-            if(shoot) {
-                robot.ShooterDown.setPower(shotSpeed);
-                robot.ShooterUp.setPower(-shotSpeed);
-            }
         }
         if(robot.FruitySensor.blue() < robot.FruitySensor.red()){
             beaconTwoWrong = true;
@@ -974,8 +969,8 @@ public class Blue6 extends LinearOpMode {
         robot.PressServoR.setPosition(1);//both in
         startPosL = robot.MotorL.getCurrentPosition();
         while (opModeIsActive() && robot.MotorL.getCurrentPosition() > startPosL - 390) {
-            robot.MotorL.setPower(-.6 * vl);
-            robot.MotorR.setPower(.6 * vr);
+            robot.MotorL.setPower(-.85 * vl);
+            robot.MotorR.setPower(.85 * vr);
             robot.PressServoR.setPosition(1);//in
             robot.PressServoL.setPosition(0);//in
             telemetry.addData("Status:", status);
