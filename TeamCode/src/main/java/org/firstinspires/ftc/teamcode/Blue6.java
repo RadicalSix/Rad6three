@@ -431,8 +431,6 @@ public class Blue6 extends LinearOpMode {
         robot.MotorR.setPower(0);
 
         status = "wait if wrong color";
-        robot.PressServoL.setPosition(1);
-        robot.PressServoR.setPosition(0);//both paddles out
         telemetry.update();
         startPosL = robot.MotorL.getCurrentPosition();
         runtime.reset();
@@ -441,6 +439,9 @@ public class Blue6 extends LinearOpMode {
             robot.MotorR.setPower(0);
             telemetry.addData("Status:", status);
             telemetry.update();
+
+            robot.PressServoL.setPosition(1);
+            robot.PressServoR.setPosition(0);//both paddles out
 
             if(shoot) {
                 robot.ShooterDown.setPower(shotSpeed);
@@ -907,8 +908,6 @@ public class Blue6 extends LinearOpMode {
         robot.MotorL.setPower(0);
 
         status = "wait if wrong color";
-        robot.PressServoL.setPosition(1);
-        robot.PressServoR.setPosition(0);//both paddles out
         telemetry.update();
         startPosL = robot.MotorL.getCurrentPosition();
         runtime.reset();
@@ -918,6 +917,9 @@ public class Blue6 extends LinearOpMode {
             telemetry.addData("Status:", status);
             telemetry.addData("MotorL to go", robot.MotorL.getCurrentPosition() - startPosL + 1250);
             telemetry.update();
+
+            robot.PressServoL.setPosition(1);
+            robot.PressServoR.setPosition(0);//both paddles out
         }
         robot.MotorL.setPower(0);
         robot.MotorR.setPower(0);
