@@ -11,12 +11,11 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 //LinearOpMode
 
-//@Autonomous(name = "ShootCenter", group = "Auto")
+@Autonomous(name = "ShootCenter", group = "Auto")
 
 public class ShootCenter extends LinearOpMode{
 
-    HardwarePushbotTDR         robot   = new HardwarePushbotTDR();
-
+    HardwarePushbotTDR robot = new HardwarePushbotTDR();
     VuforiaOp camera = new VuforiaOp();
     private ElapsedTime runtime = new ElapsedTime();
     Boolean beaconOneRed;
@@ -28,12 +27,16 @@ public class ShootCenter extends LinearOpMode{
     Boolean turnTwoDone = false;
     Boolean longDriveDone = false;
     Boolean followOneDone = false;
+    Boolean beaconOneWrong = false;
+    Boolean beaconTwoWrong = false;
+    Boolean turnInto1Hit = false;
+
+    Boolean shoot = false;//ARE WE SHOOTING THIS ROUND?
 
 
     double vr = 1;//change for direction and battery
     double vl = 1;//change for direction and battery
-    double shotSpeed = .39;//change for battery
-    double startPosL = 0;
+    double shotSpeed = .75;//change for battery
     int step = 0;
     double shot = 0;
     double lastPosL = 0;
@@ -46,6 +49,7 @@ public class ShootCenter extends LinearOpMode{
     int turnTwoCount = 0;
     int followOneCount = 0;
     int turnOneCount = 0;
+    double startPosR = 0;
     String status = "Start";
 
 /*
@@ -58,12 +62,13 @@ public class ShootCenter extends LinearOpMode{
 
         robot.init(hardwareMap);
 
-        robot.LiftServo.setPosition(.05);//down
-        robot.ShotFeeder.setPosition(.9);//down
-        robot.CapGateServo.setPosition(0);//in
+        double startPosL = robot.MotorL.getCurrentPosition();
+        robot.LiftServo.setPosition(.88);
+        robot.ShotFeeder.setPosition(.9);
+        robot.CapGateServo.setPosition(1);//in
         robot.PressServoR.setPosition(1);//in
         robot.PressServoL.setPosition(0);//in
-        robot.TouchServo.setPosition(0);//in
+        robot.TouchServo.setPosition(.1);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");    //
@@ -74,6 +79,32 @@ public class ShootCenter extends LinearOpMode{
 
         telemetry.addData("Start", 0);
         telemetry.update();
+
+        status = "wait";
+        telemetry.update();
+        startPosL = robot.MotorL.getCurrentPosition();
+        runtime.reset();
+        while (opModeIsActive() && runtime.seconds() < 0.1) {//adjust time
+            robot.MotorL.setPower(0);
+            robot.MotorR.setPower(0);
+            telemetry.addData("Status:", status);
+            telemetry.update();
+        }
+        robot.MotorL.setPower(0);
+        robot.MotorR.setPower(0);
+
+        status = "forward off wall";
+        telemetry.update();
+        startPosL = robot.MotorL.getCurrentPosition();
+        while (opModeIsActive() && robot.MotorL.getCurrentPosition() < startPosL + 100) {
+            robot.MotorL.setPower(.4 * vl);
+            robot.MotorR.setPower(.4 * vr);
+            telemetry.addData("Status:", status);
+            telemetry.addData("MotorL to go", robot.MotorL.getCurrentPosition() - startPosL - 1000);
+            telemetry.update();
+        }
+        robot.MotorL.setPower(0);
+        robot.MotorR.setPower(0);
 
         //turn on shooter
         status = "shooter on";
@@ -114,11 +145,7 @@ public class ShootCenter extends LinearOpMode{
             telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
             telemetry.addData("Status:", status);
             telemetry.update();
-
-            robot.Conveyor.setPower(.7);
         }
-        robot.Conveyor.setPower(0);
-        robot.CapGateServo.setPosition(0);//in
         robot.TouchServo.setPosition(0);//in
 
         status = "shoot second ball";
@@ -155,10 +182,10 @@ public class ShootCenter extends LinearOpMode{
         robot.ShooterDown.setPower(0);
         robot.ShooterUp.setPower(0);
 
-        status = "forward off beacon 2";
+        status = "forward to cap ball, center";
         telemetry.update();
         startPosL = robot.MotorL.getCurrentPosition();
-        while (opModeIsActive() && robot.MotorL.getCurrentPosition() < startPosL + 3000) {
+        while (opModeIsActive() && robot.MotorL.getCurrentPosition() < startPosL + 4100) {
             robot.MotorL.setPower(.4 * vl);
             robot.MotorR.setPower(.4 * vr);
             telemetry.addData("Status:", status);

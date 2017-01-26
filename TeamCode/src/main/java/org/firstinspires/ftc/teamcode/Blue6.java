@@ -142,8 +142,9 @@ public class Blue6 extends LinearOpMode {
         turnOneCount = 0;
         lastPosL = robot.MotorL.getCurrentPosition();
         lastPosR = robot.MotorR.getCurrentPosition();
+        startPosL = robot.MotorL.getCurrentPosition();
         lastClock = runtime.seconds();
-        while (opModeIsActive() && robot.ColSensor.blue() < 20) {
+        while (opModeIsActive() && (robot.ColSensor.blue() < 20)) {
             telemetry.addData("change in time", runtime.seconds() - lastClock);
             telemetry.addData("Status:", status);
             telemetry.update();
