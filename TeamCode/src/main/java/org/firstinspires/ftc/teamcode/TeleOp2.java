@@ -1,10 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.PWMOutput;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
@@ -14,9 +12,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 //LinearOpMode
 
-@TeleOp(name = "TeleOpJKB", group = "JKB")
+@TeleOp(name = "TeleOp2", group = "JKB")
 
-public class TeleOpJKB extends OpMode{
+public class TeleOp2 extends OpMode{
 
     HardwarePushbotTDR         robot   = new HardwarePushbotTDR();
     public DcMotor motorR;
@@ -30,6 +28,7 @@ public class TeleOpJKB extends OpMode{
     double loadStep = 0;
     double shotspeed = .44;
     double startPosR;
+    double shotDirection = 1.0;
     boolean backdone = false;
     double reduceSpeed = 1;
     double touchStep = 0;
@@ -146,49 +145,84 @@ public class TeleOpJKB extends OpMode{
 
         //SHOOTING
         if(gamepad1.a){
-            shotspeed = .44;
+            shotspeed = .44;//first tier
         }
         if(gamepad1.y){
-            shotspeed = .64;
+            shotspeed = .64;//second tier
         }
         if(gamepad1.right_bumper){
-            shotspeed = .84;
+            shotspeed = .84;//third tier
         }
         if(gamepad1.right_trigger > .05){
-            shotspeed = 1;
+            shotspeed = 1;//fourth tier
         }
 
-        if(gamepad2.y && robot.LiftServo.getPosition() == .88){//on
+        if(gamepad1.left_bumper && (step < 0.05) && (step > -0.05)){
+            shotDirection = -1;//shoot inward
+        }
+        if((gamepad1.left_trigger > .05) && (step < 0.05) && (step > -0.05)){
+            shotDirection = 1;//shoot outward
+        }
+
+        if(gamepad2.y && robot.LiftServo.getPosition() == .88){
             robot.PressServoL.setPosition(1);
-            shot = 1;
+            shot = 1;//on
         }
-        if(gamepad2.a){//off
-            shot = 0;
+        if(gamepad2.a){
+            shot = 0;//off
         }
-        if(shot == 1){
-            if(step < (shotspeed - 0.05)){
-                step += 0.02;
-            }
-            if(step > (shotspeed - 0.05)){
-                step = shotspeed;
-            }
-        }
-        if(shot == 0){
-            if(step > 0.05 ){
-                step -= 0.01;
-            }
-            if(step < 0.08){
-                step -= 0.0025;//smaller increments for ending
-            }
-            if(step < 0.0025){
-                step = 0;
-            }
 
+        //forward, out
+        if(shotDirection == 1) {
+            if (shot == 1) {
+                if (step < (shotspeed - 0.05)) {
+                    step += 0.02;
+                }
+                if (step > (shotspeed - 0.05)) {
+                    step = shotspeed;
+                }
+            }
+            if (shot == 0) {
+                if (step > 0.05) {
+                    step -= 0.01;
+                }
+                if (step < 0.08) {
+                    step -= 0.0025;//smaller increments for ending
+                }
+                if (step < 0.0025) {
+                    step = 0;
+                }
+            }
         }
+
+        //forward, out
+        if(shotDirection == -1) {
+            if (shot == 1) {
+                if (step > (-shotspeed + 0.05)) {
+                    step -= 0.02;
+                }
+                if (step < (-shotspeed + 0.05)) {
+                    step = -shotspeed;
+                }
+            }
+            if (shot == 0) {
+                if (step < -0.05) {
+                    step += 0.01;
+                }
+                if (step > -0.08) {
+                    step += 0.0025;//smaller increments for ending
+                }
+                if (step > -0.0025) {
+                    step = 0;
+                }
+            }
+        }
+
 
         telemetry.addData("shot", shot);
         telemetry.addData("step", step);
         telemetry.addData("shotspeed", shotspeed);
+        telemetry.addData("shotDirection", shotDirection);
         robot.ShooterDown.setPower(step);
         robot.ShooterUp.setPower(-step);
 
@@ -240,7 +274,7 @@ public class TeleOpJKB extends OpMode{
         //LIFT
         double h = -gamepad2.left_stick_y;
         telemetry.addData("h", h);
-        if(((h > 0.05) || (h < -0.05)) && (robot.LiftServo.getPosition() == .05)){//does not lift unless servo out of way
+        if(((h > 0.05) || (h < -0.05)) && (robot.LiftServo.getPosition() < .5)){//does not lift unless servo out of way
             robot.Lift.setPower(h);
         }
         else{
@@ -249,16 +283,16 @@ public class TeleOpJKB extends OpMode{
 
         //Cap Gate
         if(gamepad2.b){
-            robot.CapGateServo.setPosition(1);//in
+            robot.CapGateServo.setPosition(1);//out
         }
         if(gamepad2.x){
-            robot.CapGateServo.setPosition(0);//out
+            robot.CapGateServo.setPosition(0);//in
         }
 
 
         //LiftServo up
         if(gamepad2.left_bumper){
-            robot.LiftServo.setPosition(.05);//up
+            robot.LiftServo.setPosition(0);//up
         }
         if(gamepad2.left_trigger > .5){
             robot.LiftServo.setPosition(.88);//down

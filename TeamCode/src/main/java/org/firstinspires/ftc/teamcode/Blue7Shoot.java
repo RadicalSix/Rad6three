@@ -13,9 +13,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 //LinearOpMode
     //started 12/19 by Justin
 
-@Autonomous(name = "Blue7", group = "Auto")
+@Autonomous(name = "Blue7Shoot", group = "Auto")
 
-public class Blue7 extends LinearOpMode {
+public class Blue7Shoot extends LinearOpMode {
 
     HardwarePushbotTDR robot = new HardwarePushbotTDR();
     VuforiaOp camera = new VuforiaOp();
@@ -33,7 +33,7 @@ public class Blue7 extends LinearOpMode {
     Boolean beaconOneWrong = false;
     Boolean beaconTwoWrong = false;
 
-    Boolean shoot = false;//ARE WE SHOOTING THIS ROUND?
+    Boolean shoot = true;//ARE WE SHOOTING THIS ROUND?
 
 
 
@@ -68,7 +68,7 @@ public class Blue7 extends LinearOpMode {
 
         double startPosL = robot.MotorL.getCurrentPosition();
         robot.LiftServo.setPosition(.88);//down
-        robot.ShotFeeder.setPosition(.9);//down
+        robot.ShotFeeder.setPosition(.8);//down
         robot.CapGateServo.setPosition(1);//in
         robot.PressServoR.setPosition(1);//in
         robot.PressServoL.setPosition(0);//in
@@ -602,10 +602,10 @@ public class Blue7 extends LinearOpMode {
                 telemetry.update();
             }
 
-            status = "feed second ball";
+            /*status = "feed second ball";
             runtime.reset();
             while (opModeIsActive() && runtime.seconds() < 1) {
-                robot.ShotFeeder.setPosition(.9);//down
+                robot.ShotFeeder.setPosition(.8);//down
                 telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
                 telemetry.addData("Status:", status);
                 telemetry.update();
@@ -625,7 +625,7 @@ public class Blue7 extends LinearOpMode {
                 telemetry.update();
             }
             robot.PressServoL.setPosition(0);//left in
-            robot.PressServoR.setPosition(1);//left in
+            robot.PressServoR.setPosition(1);//left in*/
 
             status = "forward after shoot";
             telemetry.update();
@@ -702,7 +702,7 @@ public class Blue7 extends LinearOpMode {
             if(shoot) {
                 if (shot > 0.18) {
                     shot -= 0.02;
-                    robot.ShotFeeder.setPosition(.9);
+                    robot.ShotFeeder.setPosition(.8);
                     robot.ShooterDown.setPower(shot);
                     robot.ShooterUp.setPower(-shot);
                 } else if (shot < 0.18 && shot > 0) {

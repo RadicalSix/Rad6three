@@ -11,9 +11,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 //LinearOpMode
 
-@Autonomous(name = "ShootCenter", group = "Auto")
+@Autonomous(name = "ShootCornerBlue", group = "Auto")
 
-public class ShootCenter extends LinearOpMode{
+public class ShootCornerBlue extends LinearOpMode{
 
     HardwarePushbotTDR robot = new HardwarePushbotTDR();
     VuforiaOp camera = new VuforiaOp();
@@ -84,7 +84,7 @@ public class ShootCenter extends LinearOpMode{
         telemetry.update();
         startPosL = robot.MotorL.getCurrentPosition();
         runtime.reset();
-        while (opModeIsActive() && runtime.seconds() < 0) {//adjust time-- 17 wait is max
+        while (opModeIsActive() && runtime.seconds() < 0) {//adjust time
             robot.MotorL.setPower(0);
             robot.MotorR.setPower(0);
             telemetry.addData("Status:", status);
@@ -182,10 +182,23 @@ public class ShootCenter extends LinearOpMode{
         robot.ShooterDown.setPower(0);
         robot.ShooterUp.setPower(0);
 
+        status = "turn to the right";
+        telemetry.update();
+        startPosL = robot.MotorL.getCurrentPosition();
+        while (opModeIsActive() && robot.MotorL.getCurrentPosition() < startPosL + 750) {
+            robot.MotorL.setPower(.6 * vl);
+            robot.MotorR.setPower(-.6 * vr);
+            telemetry.addData("Status:", status);
+            telemetry.addData("MotorL to go", robot.MotorL.getCurrentPosition() - startPosL - 750);
+            telemetry.update();
+        }
+        robot.MotorL.setPower(0);
+        robot.MotorR.setPower(0);
+
         status = "forward onto corner";
         telemetry.update();
         startPosL = robot.MotorL.getCurrentPosition();
-        while (opModeIsActive() && robot.MotorL.getCurrentPosition() < startPosL + 4300) {
+        while (opModeIsActive() && robot.MotorL.getCurrentPosition() < startPosL + 7300) {
             robot.MotorL.setPower(1 * vl);
             robot.MotorR.setPower(1 * vr);
             telemetry.addData("Status:", status);

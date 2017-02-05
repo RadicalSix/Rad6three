@@ -13,9 +13,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 //LinearOpMode
     //started 12/19 by Justin
 
-@Autonomous(name = "Blue7", group = "Auto")
+@Autonomous(name = "Blue7noCap", group = "Auto")
 
-public class Blue7 extends LinearOpMode {
+public class Blue7noCap extends LinearOpMode {
 
     HardwarePushbotTDR robot = new HardwarePushbotTDR();
     VuforiaOp camera = new VuforiaOp();
@@ -1023,36 +1023,6 @@ public class Blue7 extends LinearOpMode {
             robot.MotorR.setPower(.4 * vr);
             telemetry.addData("Status:", status);
             telemetry.addData("MotorL to go", robot.MotorL.getCurrentPosition() - startPosL - 1000);
-            telemetry.update();
-        }
-        robot.MotorL.setPower(0);
-        robot.MotorR.setPower(0);
-
-        status = "turn to center";
-        telemetry.update();
-        robot.PressServoL.setPosition(0);
-        robot.PressServoR.setPosition(1);//both in
-        startPosL = robot.MotorL.getCurrentPosition();
-        while (opModeIsActive() && robot.MotorL.getCurrentPosition() > startPosL - 390) {
-            robot.MotorL.setPower(-.85 * vl);
-            robot.MotorR.setPower(.85 * vr);
-            robot.PressServoR.setPosition(1);//in
-            robot.PressServoL.setPosition(0);//in
-            telemetry.addData("Status:", status);
-            telemetry.addData("MotorL to go", robot.MotorL.getCurrentPosition() - startPosL - 390);
-            telemetry.update();
-        }
-        robot.MotorL.setPower(0);
-        robot.MotorR.setPower(0);
-
-        status = "drive and park";
-        telemetry.update();
-        startPosL = robot.MotorL.getCurrentPosition();
-        while (opModeIsActive() && robot.MotorL.getCurrentPosition() < startPosL + 4500) {
-            robot.MotorL.setPower(1 * vl);
-            robot.MotorR.setPower(1 * vr);
-            telemetry.addData("Status:", status);
-            telemetry.addData("MotorL to go", robot.MotorL.getCurrentPosition() - startPosL - 4500);
             telemetry.update();
         }
         robot.MotorL.setPower(0);

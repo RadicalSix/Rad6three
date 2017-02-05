@@ -98,7 +98,7 @@ public class Red7 extends LinearOpMode {
         status = "drive back until white line";
         shot = 0;
         while (opModeIsActive() && robot.MotorL.getCurrentPosition() > startPosL - 4350 && !doneDrive1) {//stop if hit line or go certain distance
-            if (robot.ColSensor.blue() > 20) {
+            if (robot.ColSensor.green() > 13) {
                 doneDrive1 = true;//hit white line
             }
             robot.MotorL.setPower(-1 * vl);
@@ -106,7 +106,7 @@ public class Red7 extends LinearOpMode {
             robot.PressServoL.setPosition(0);//in
             telemetry.addData("Status:", status);
             telemetry.addData("MotorL current", robot.MotorL.getCurrentPosition() - startPosL);
-            telemetry.addData("sensorColor:", robot.ColSensor.blue());
+            telemetry.addData("sensorColor:", robot.ColSensor.green());
             telemetry.update();
 
             if (shoot) {
@@ -151,7 +151,7 @@ public class Red7 extends LinearOpMode {
         startPosL = robot.MotorL.getCurrentPosition();
         lastClock = runtime.seconds();
         while (opModeIsActive() && (robot.MotorL.getCurrentPosition() > startPosL - 1400) && !turnInto1Hit) {
-            if(robot.ColSensor.blue() > 20){
+            if(robot.ColSensor.green() > 13){
                 turnInto1Hit= true;//true if hit white line
             }
             telemetry.addData("change in time", runtime.seconds() - lastClock);
@@ -229,7 +229,7 @@ public class Red7 extends LinearOpMode {
         lastPosR = robot.MotorR.getCurrentPosition();
         startPosL = robot.MotorL.getCurrentPosition();
         lastClock = runtime.seconds();
-        while (opModeIsActive() && (robot.ColSensor.blue() < 20) && !turnInto1Hit) {
+        while (opModeIsActive() && (robot.ColSensor.green() < 13) && !turnInto1Hit) {
             telemetry.addData("change in time", runtime.seconds() - lastClock);
             telemetry.addData("Status:", status);
             telemetry.update();
@@ -290,10 +290,10 @@ public class Red7 extends LinearOpMode {
             telemetry.addData("Status:", status);
             telemetry.addData("TouSensor.isPressed()", robot.TouSensor.isPressed());
             telemetry.update();
-            if (robot.ColSensor.blue() < 20) {//grey
+            if (robot.ColSensor.green() < 13) {//grey
                 robot.MotorR.setPower(.2 * vl);
                 robot.MotorL.setPower(-.4 * vr);
-            } else if (robot.ColSensor.blue() > 20) {//white
+            } else if (robot.ColSensor.green() > 13) {//white
                 robot.MotorR.setPower(-.4 * vl);
                 robot.MotorL.setPower(.2 * vr);
             }
@@ -368,7 +368,7 @@ public class Red7 extends LinearOpMode {
         runtime.reset();
         while (opModeIsActive() && runtime.seconds() < .1) {
             telemetry.addData("Status:", status);
-            telemetry.addData("sensorColor:", robot.ColSensor.blue());
+            telemetry.addData("sensorColor:", robot.ColSensor.green());
             telemetry.update();
             if (robot.FruitySensor.blue() > robot.FruitySensor.red()) {
                 beaconOneRed = false;
@@ -388,7 +388,7 @@ public class Red7 extends LinearOpMode {
         startPosL = robot.MotorL.getCurrentPosition();
         lastClock = runtime.seconds();
         robot.TouchServo.setPosition(.1);//in
-        while (opModeIsActive() && (robot.MotorL.getCurrentPosition() < startPosL + 100)) {
+        while (opModeIsActive() && (robot.MotorL.getCurrentPosition() < startPosL + 300)) {
             robot.MotorL.setPower(.3 * vl);
             robot.MotorR.setPower(.3 * vr);
             telemetry.addData("Status:", status);
@@ -429,7 +429,7 @@ public class Red7 extends LinearOpMode {
         lastPosL = robot.MotorL.getCurrentPosition();
         lastPosR = robot.MotorR.getCurrentPosition();
         lastClock = runtime.seconds();
-        while (opModeIsActive() && (robot.MotorL.getCurrentPosition() > startPosL - 350) && !beaconOneDone) {
+        while (opModeIsActive() && (robot.MotorL.getCurrentPosition() > startPosL - 500) && !beaconOneDone) {
             robot.MotorL.setPower(-1 * vl);
             robot.MotorR.setPower(-1 * vr);
 
@@ -480,7 +480,7 @@ public class Red7 extends LinearOpMode {
         status = "forward if wrong color";
         startPosL = robot.MotorL.getCurrentPosition();
         lastClock = runtime.seconds();
-        while (opModeIsActive() && (robot.MotorL.getCurrentPosition() < startPosL + 100) && beaconOneWrong) {
+        while (opModeIsActive() && (robot.MotorL.getCurrentPosition() < startPosL + 200) && beaconOneWrong) {
             robot.MotorL.setPower(.3 * vl);
             robot.MotorR.setPower(.3 * vr);
             telemetry.addData("Status:", status);
@@ -523,7 +523,7 @@ public class Red7 extends LinearOpMode {
         lastPosL = robot.MotorL.getCurrentPosition();
         lastPosR = robot.MotorR.getCurrentPosition();
         lastClock = runtime.seconds();
-        while (opModeIsActive() && (robot.MotorL.getCurrentPosition() > startPosL - 200) && beaconOneWrong) {
+        while (opModeIsActive() && (robot.MotorL.getCurrentPosition() > startPosL - 300) && beaconOneWrong) {
             robot.MotorL.setPower(-1 * vl);
             robot.MotorR.setPower(-1 * vr);
 
@@ -666,7 +666,7 @@ public class Red7 extends LinearOpMode {
         status = "turn to beacon 2";
         telemetry.update();
         startPosL = robot.MotorL.getCurrentPosition();
-        while (opModeIsActive() && robot.MotorL.getCurrentPosition() < startPosL + 1300) {
+        while (opModeIsActive() && robot.MotorL.getCurrentPosition() < startPosL + 1150) {
             robot.MotorL.setPower(.5 * vl);
             robot.MotorR.setPower(-.5 * vr);
             robot.PressServoR.setPosition(1);//in
@@ -689,11 +689,11 @@ public class Red7 extends LinearOpMode {
         while (opModeIsActive() && (robot.MotorL.getCurrentPosition() > startPosL - 3700) && !longDriveDone) {//stop if hit line or go certain distance
             robot.MotorL.setPower(-1 * vl);
             robot.MotorR.setPower(-1 * vr);
-            if (robot.ColSensor.blue() > 20) {
+            if (robot.ColSensor.green() > 13) {
                 longDriveDone = true;//hit white line
             }
             telemetry.addData("Status:", status);
-            telemetry.addData("sensorColor:", robot.ColSensor.blue());
+            telemetry.addData("sensorColor:", robot.ColSensor.green());
             telemetry.update();
 
             if (shoot) {
@@ -736,7 +736,7 @@ public class Red7 extends LinearOpMode {
         lastPosL = robot.MotorL.getCurrentPosition();
         lastPosR = robot.MotorR.getCurrentPosition();
         lastClock = runtime.seconds();
-        while (opModeIsActive() && robot.ColSensor.blue() < 20) {
+        while (opModeIsActive() && robot.ColSensor.green() < 13) {
             telemetry.addData("change in time", runtime.seconds() - lastClock);
             telemetry.addData("Status:", status);
             telemetry.update();
@@ -800,10 +800,10 @@ public class Red7 extends LinearOpMode {
             telemetry.addData("Status:", status);
             telemetry.addData("TouSensor.isPressed()", robot.TouSensor.isPressed());
             telemetry.update();
-            if (robot.ColSensor.blue() < 20) {//grey
+            if (robot.ColSensor.green() < 13) {//grey
                 robot.MotorR.setPower(.2 * vl);
                 robot.MotorL.setPower(-.4 * vr);
-            } else if (robot.ColSensor.blue() > 20) {//white
+            } else if (robot.ColSensor.green() > 13) {//white
                 robot.MotorR.setPower(-.4 * vl);
                 robot.MotorL.setPower(.2 * vr);
             }
@@ -863,7 +863,7 @@ public class Red7 extends LinearOpMode {
         runtime.reset();
         while (opModeIsActive() && runtime.seconds() < .1) {
             telemetry.addData("Status:", status);
-            telemetry.addData("sensorColor:", robot.ColSensor.blue());
+            telemetry.addData("sensorColor:", robot.ColSensor.green());
             telemetry.update();
             if (robot.FruitySensor.blue() > robot.FruitySensor.red()) {
                 beaconOneRed = false;
@@ -876,7 +876,7 @@ public class Red7 extends LinearOpMode {
         startPosL = robot.MotorL.getCurrentPosition();
         lastClock = runtime.seconds();
         robot.TouchServo.setPosition(.1);
-        while (opModeIsActive() && (robot.MotorL.getCurrentPosition() < startPosL + 100)) {
+        while (opModeIsActive() && (robot.MotorL.getCurrentPosition() < startPosL + 300)) {
             robot.MotorL.setPower(.3 * vl);
             robot.MotorR.setPower(.3 * vr);
             telemetry.addData("Status:", status);
@@ -911,7 +911,7 @@ public class Red7 extends LinearOpMode {
         lastPosL = robot.MotorL.getCurrentPosition();
         lastPosR = robot.MotorR.getCurrentPosition();
         lastClock = runtime.seconds();
-        while (opModeIsActive() && (robot.MotorL.getCurrentPosition() > startPosL - 300) && !beaconTwoDone) {
+        while (opModeIsActive() && (robot.MotorL.getCurrentPosition() > startPosL - 500) && !beaconTwoDone) {
             robot.MotorL.setPower(-1 * vl);
             robot.MotorR.setPower(-1 * vr);
             telemetry.addData("Status:", status);
