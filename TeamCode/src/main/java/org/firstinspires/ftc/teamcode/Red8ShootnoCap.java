@@ -17,9 +17,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 //LinearOpMode
     //started 12/19 by Justin
 
-//@Autonomous(name = "Red7noCapShoot", group = "Auto")
+@Autonomous(name = "Red8ShootnoCap", group = "Auto")
 
-public class Red7noCapShoot extends LinearOpMode {
+public class Red8ShootnoCap extends LinearOpMode {
 
     HardwarePushbotTDR robot = new HardwarePushbotTDR();
     VuforiaOp camera = new VuforiaOp();
@@ -72,7 +72,7 @@ public class Red7noCapShoot extends LinearOpMode {
 
         double startPosL = robot.MotorL.getCurrentPosition();
         robot.LiftServo.setPosition(.88);
-        robot.ShotFeeder.setPosition(.8);
+        robot.ShotFeeder.setPosition(.9);
         robot.CapGateServo.setPosition(1);//in
         robot.PressServoR.setPosition(1);//in
         robot.PressServoL.setPosition(0);//in
@@ -607,7 +607,7 @@ public class Red7noCapShoot extends LinearOpMode {
             /*status = "feed second ball";
             runtime.reset();
             while (opModeIsActive() && runtime.seconds() < 1) {
-                robot.ShotFeeder.setPosition(.8);//down
+                robot.ShotFeeder.setPosition(.9);//down
                 telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
                 telemetry.addData("Status:", status);
                 telemetry.update();
@@ -666,7 +666,7 @@ public class Red7noCapShoot extends LinearOpMode {
         status = "turn to beacon 2";
         telemetry.update();
         startPosL = robot.MotorL.getCurrentPosition();
-        while (opModeIsActive() && robot.MotorL.getCurrentPosition() < startPosL + 1300) {
+        while (opModeIsActive() && robot.MotorL.getCurrentPosition() < startPosL + 1150) {
             robot.MotorL.setPower(.5 * vl);
             robot.MotorR.setPower(-.5 * vr);
             robot.PressServoR.setPosition(1);//in
@@ -699,7 +699,7 @@ public class Red7noCapShoot extends LinearOpMode {
             if (shoot) {
                 if (shot > 0.18) {
                     shot -= 0.02;
-                    robot.ShotFeeder.setPosition(.8);
+                    robot.ShotFeeder.setPosition(.9);
                     robot.ShooterDown.setPower(shot);
                     robot.ShooterUp.setPower(-shot);
                 } else if (shot < 0.18 && shot > 0) {
@@ -1020,8 +1020,6 @@ public class Red7noCapShoot extends LinearOpMode {
         }
         robot.MotorL.setPower(0);
         robot.MotorR.setPower(0);
-
-
 
         telemetry.addData("Shot:", shot);
         if (shot > 0) {
