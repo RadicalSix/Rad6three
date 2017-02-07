@@ -17,9 +17,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 //LinearOpMode
     //started 12/19 by Justin
 
-@Autonomous(name = "Red8noCap", group = "Auto")
+@Autonomous(name = "Red8ShootX", group = "Auto")
 
-public class Red8noCap extends LinearOpMode {
+public class Red8ShootX extends LinearOpMode {
 
     HardwarePushbotTDR robot = new HardwarePushbotTDR();
     VuforiaOp camera = new VuforiaOp();
@@ -37,7 +37,8 @@ public class Red8noCap extends LinearOpMode {
     Boolean beaconTwoWrong = false;
     Boolean turnInto1Hit = false;
 
-    Boolean shoot = false;//ARE WE SHOOTING THIS ROUND?
+    Boolean shoot = true;//ARE WE SHOOTING THIS ROUND?
+    Boolean twoBalls = false;
 
 
     double vr = 1;//change for direction and battery
@@ -457,7 +458,7 @@ public class Red8noCap extends LinearOpMode {
         robot.MotorR.setPower(0);
         robot.MotorL.setPower(0);
 
-        status = "check correct color";
+        status = "check correct color and shoot";
         lastClock = runtime.seconds();
         runtime.reset();
         while (opModeIsActive() && runtime.seconds() < 1.6) {//.1 1/22
@@ -469,6 +470,7 @@ public class Red8noCap extends LinearOpMode {
             if (shoot) {
                 robot.ShooterDown.setPower(shotSpeed);
                 robot.ShooterUp.setPower(-shotSpeed);
+                robot.ShotFeeder.setPosition(0);//shoot
             }
         }
         if (robot.FruitySensor.blue() > robot.FruitySensor.red()) {
@@ -476,6 +478,7 @@ public class Red8noCap extends LinearOpMode {
         }
         robot.MotorL.setPower(0);
         robot.MotorR.setPower(0);
+        robot.ShotFeeder.setPosition(0.8);//shot feeder down
 
         status = "forward if wrong color";
         startPosL = robot.MotorL.getCurrentPosition();
@@ -513,10 +516,12 @@ public class Red8noCap extends LinearOpMode {
             if (shoot) {
                 robot.ShooterDown.setPower(shotSpeed);
                 robot.ShooterUp.setPower(-shotSpeed);
+                robot.ShotFeeder.setPosition(0);//shoot second ball regardless
             }
         }
         robot.MotorL.setPower(0);
         robot.MotorR.setPower(0);
+        robot.ShotFeeder.setPosition(0);//shot feeder down
 
         status = "backward and press buttons, beacon 1, second try";
         startPosL = robot.MotorL.getCurrentPosition();
@@ -551,7 +556,7 @@ public class Red8noCap extends LinearOpMode {
         robot.MotorR.setPower(0);
         robot.MotorL.setPower(0);
 
-        if (shoot && !beaconOneWrong) {
+        if (twoBalls && !beaconOneWrong) {
             status = "forward off beacon 1";
             telemetry.update();
             startPosL = robot.MotorL.getCurrentPosition();
@@ -589,9 +594,9 @@ public class Red8noCap extends LinearOpMode {
                 }
             }
             robot.MotorL.setPower(0);
-            robot.MotorR.setPower(0);**/
+            robot.MotorR.setPower(0);*/
 
-            status = "shoot first ball";
+            status = "shoot second";
             runtime.reset();
             while (opModeIsActive() && runtime.seconds() < 1.2) {
                 shot = shotSpeed;
@@ -604,7 +609,7 @@ public class Red8noCap extends LinearOpMode {
                 telemetry.update();
             }
 
-            status = "feed second ball";
+            /*status = "feed second ball";
             runtime.reset();
             while (opModeIsActive() && runtime.seconds() < 1) {
                 robot.ShotFeeder.setPosition(.9);//down
@@ -627,7 +632,7 @@ public class Red8noCap extends LinearOpMode {
                 robot.ShooterUp.setPower(-shotSpeed);
             }
             robot.PressServoL.setPosition(0);//left in
-            robot.PressServoR.setPosition(1);//left in
+            robot.PressServoR.setPosition(1);//left in*/
 
 
             status = "forward after shoot";
@@ -650,7 +655,7 @@ public class Red8noCap extends LinearOpMode {
         }
 
 
-        else if(!shoot || beaconOneWrong){
+        else if(!twoBalls || beaconOneWrong){
             status = "forward after shoot";
             telemetry.update();
             startPosL = robot.MotorL.getCurrentPosition();
@@ -1016,6 +1021,36 @@ public class Red8noCap extends LinearOpMode {
             robot.MotorR.setPower(.4 * vr);
             telemetry.addData("Status:", status);
             telemetry.addData("MotorL to go", robot.MotorL.getCurrentPosition() - startPosL - 1000);
+            telemetry.update();
+        }
+        robot.MotorL.setPower(0);
+        robot.MotorR.setPower(0);
+
+        status = "turn to center";
+        telemetry.update();
+        robot.PressServoL.setPosition(0);
+        robot.PressServoR.setPosition(1);//both in
+        startPosL = robot.MotorL.getCurrentPosition();
+        while (opModeIsActive() && robot.MotorL.getCurrentPosition() < startPosL + 800) {
+            robot.MotorL.setPower(.85 * vl);
+            robot.MotorR.setPower(-.85 * vr);
+            robot.PressServoR.setPosition(1);//in
+            robot.PressServoL.setPosition(0);//out
+            telemetry.addData("Status:", status);
+            telemetry.addData("MotorL to go", robot.MotorL.getCurrentPosition() - startPosL - 00);
+            telemetry.update();
+        }
+        robot.MotorL.setPower(0);
+        robot.MotorR.setPower(0);
+
+        status = "drive and park";
+        telemetry.update();
+        startPosL = robot.MotorL.getCurrentPosition();
+        while (opModeIsActive() && robot.MotorL.getCurrentPosition() < startPosL + 4500) {
+            robot.MotorL.setPower(1 * vl);
+            robot.MotorR.setPower(1 * vr);
+            telemetry.addData("Status:", status);
+            telemetry.addData("MotorL to go", robot.MotorL.getCurrentPosition() - startPosL - 4500);
             telemetry.update();
         }
         robot.MotorL.setPower(0);

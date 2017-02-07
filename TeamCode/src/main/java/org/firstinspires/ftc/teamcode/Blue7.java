@@ -145,7 +145,7 @@ public class Blue7 extends LinearOpMode {
         lastPosR = robot.MotorR.getCurrentPosition();
         startPosL = robot.MotorL.getCurrentPosition();
         lastClock = runtime.seconds();
-        while (opModeIsActive() && (robot.MotorL.getCurrentPosition() < startPosL + 1700) && !turnInto1Hit) {
+        while (opModeIsActive() && (robot.MotorL.getCurrentPosition() < startPosL + 1400) && !turnInto1Hit) {
             if(robot.ColSensor.green() > 13){
                 turnInto1Hit= true;//true if hit white line
             }
@@ -184,7 +184,7 @@ public class Blue7 extends LinearOpMode {
         status = "turn back if missed the white line the fist time";
         telemetry.update();
         startPosL = robot.MotorL.getCurrentPosition();
-        while (opModeIsActive() && (robot.MotorL.getCurrentPosition() > startPosL - 850) && !turnInto1Hit) {
+        while (opModeIsActive() && (robot.MotorL.getCurrentPosition() > startPosL - 1000) && !turnInto1Hit) {
             robot.MotorL.setPower(-.5 * vl);
             robot.MotorR.setPower(.5 * vr);
             telemetry.addData("Status:", status);
@@ -261,8 +261,8 @@ public class Blue7 extends LinearOpMode {
         telemetry.update();
         startPosL = robot.MotorL.getCurrentPosition();
         while (opModeIsActive() && robot.MotorL.getCurrentPosition() > startPosL - 110) {
-            robot.MotorL.setPower(-.3 * vl);
-            robot.MotorR.setPower(.3 * vr);
+            robot.MotorL.setPower(-.38 * vl);
+            robot.MotorR.setPower(.38 * vr);
             telemetry.addData("Status:", status);
             telemetry.addData("MotorL to go", robot.MotorL.getCurrentPosition() + startPosL + 110);
             telemetry.update();
@@ -342,8 +342,8 @@ public class Blue7 extends LinearOpMode {
         telemetry.update();
         startPosL = robot.MotorL.getCurrentPosition();
         while (opModeIsActive() && robot.MotorL.getCurrentPosition() < startPosL + 70) {
-            robot.MotorL.setPower(.3 * vl);
-            robot.MotorR.setPower(-.3 * vr);
+            robot.MotorL.setPower(.38 * vl);
+            robot.MotorR.setPower(-.38 * vr);
             telemetry.addData("Status:", status);
             telemetry.addData("MotorL to go", robot.MotorL.getCurrentPosition() - startPosL - 70);
             telemetry.update();
@@ -789,8 +789,8 @@ public class Blue7 extends LinearOpMode {
         telemetry.update();
         startPosL = robot.MotorL.getCurrentPosition();
         while (opModeIsActive() && robot.MotorL.getCurrentPosition() > startPosL - 110) {
-            robot.MotorL.setPower(-.3 * vl);
-            robot.MotorR.setPower(.3 * vr);
+            robot.MotorL.setPower(-.38 * vl);
+            robot.MotorR.setPower(.38 * vr);
             telemetry.addData("Status:", status);
             telemetry.addData("MotorL to go", robot.MotorL.getCurrentPosition() - startPosL + 1250);
             telemetry.update();
@@ -853,8 +853,8 @@ public class Blue7 extends LinearOpMode {
         telemetry.update();
         startPosL = robot.MotorL.getCurrentPosition();
         while (opModeIsActive() && robot.MotorL.getCurrentPosition() < startPosL + 70) {
-            robot.MotorL.setPower(.3 * vl);
-            robot.MotorR.setPower(-.3 * vr);
+            robot.MotorL.setPower(.38 * vl);
+            robot.MotorR.setPower(-.38 * vr);
             telemetry.addData("Status:", status);
             telemetry.addData("MotorL to go", robot.MotorL.getCurrentPosition() - startPosL + 1250);
             telemetry.update();

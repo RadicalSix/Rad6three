@@ -266,8 +266,8 @@ public class Red8 extends LinearOpMode {
         telemetry.update();
         startPosL = robot.MotorL.getCurrentPosition();
         while (opModeIsActive() && robot.MotorL.getCurrentPosition() < startPosL + 110) {
-            robot.MotorL.setPower(.3 * vl);
-            robot.MotorR.setPower(-.3 * vr);
+            robot.MotorL.setPower(.38 * vl);
+            robot.MotorR.setPower(-.38 * vr);
             telemetry.addData("Status:", status);
             telemetry.addData("MotorL to go", robot.MotorL.getCurrentPosition() - startPosL - 110);
             telemetry.update();
@@ -782,8 +782,8 @@ public class Red8 extends LinearOpMode {
         telemetry.update();
         startPosL = robot.MotorL.getCurrentPosition();
         while (opModeIsActive() && robot.MotorL.getCurrentPosition() < startPosL + 110) {
-            robot.MotorL.setPower(.3 * vl);
-            robot.MotorR.setPower(-.3 * vr);
+            robot.MotorL.setPower(.38 * vl);
+            robot.MotorR.setPower(-.38 * vr);
             telemetry.addData("Status:", status);
             telemetry.addData("MotorL to go", robot.MotorL.getCurrentPosition() - startPosL + 1250);
             telemetry.update();
@@ -846,8 +846,8 @@ public class Red8 extends LinearOpMode {
         telemetry.update();
         startPosR = robot.MotorR.getCurrentPosition();
         while (opModeIsActive() && robot.MotorR.getCurrentPosition() < startPosR + 70) {
-            robot.MotorL.setPower(-.35 * vl);
-            robot.MotorR.setPower(.35 * vr);
+            robot.MotorL.setPower(-.38 * vl);
+            robot.MotorR.setPower(.38 * vr);
             telemetry.addData("Status:", status);
             telemetry.addData("MotorR to go", robot.MotorR.getCurrentPosition() - startPosL - 70);
             telemetry.update();

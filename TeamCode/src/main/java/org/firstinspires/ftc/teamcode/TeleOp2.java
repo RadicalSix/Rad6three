@@ -291,10 +291,10 @@ public class TeleOp2 extends OpMode{
 
 
         //LiftServo up
-        if(gamepad2.left_bumper){
+        if((gamepad2.left_bumper) && (h < 0.05) && (h > -0.05)){//can't move servo while lifting
             robot.LiftServo.setPosition(0);//up
         }
-        if(gamepad2.left_trigger > .5){
+        if((gamepad2.left_trigger > .5) && (h < 0.05) && (h > -0.05)){//cant move servo while lifting
             robot.LiftServo.setPosition(.88);//down
         }
 
